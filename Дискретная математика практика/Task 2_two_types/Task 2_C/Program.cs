@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -28,42 +28,6 @@ namespace Task_2_C
                 }
             }
             Console.WriteLine(count * 3); // 1620249447
-            Console.ReadKey();
-        }
-        static void Main_s(string[] args)
-        {
-            List<string> all_items = new List<string>() { "AA", "AU", "AC", "AG", "UA", "UU", "UC", "UG", "CA", "CU", "CC", "CG", "GA", "GU", "GC", "GG" };
-            for (int tryed = 0; tryed < 13; tryed++)
-            {
-                List<string> new_items = new List<string>();
-                for (int i = 0; i < all_items.Count; i++)
-                {
-                    string el = all_items[i];
-                    if (el[(el.Length - 2)..] == "UA")
-                    {
-                        new_items.Add(el + "U");
-                        new_items.Add(el + "С");
-                    }
-                    else if (el[(el.Length - 2)..] == "UG")
-                    {
-                        new_items.Add(el + "G");
-                        new_items.Add(el + "U");
-                        new_items.Add(el + "С");
-                    }
-                    else
-                    {
-                        new_items.Add(el + "A");
-                        new_items.Add(el + "G");
-                        new_items.Add(el + "U");
-                        new_items.Add(el + "С");
-                    }
-                }
-                all_items = new_items;
-                Console.WriteLine(tryed);
-                Console.WriteLine(all_items[all_items.Count / 2]);
-                Console.WriteLine(all_items.Count);
-            }
-            Console.WriteLine(all_items.Count * 3);
             Console.ReadKey();
         }
     }
