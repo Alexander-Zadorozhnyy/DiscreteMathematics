@@ -3,9 +3,10 @@ from decimal import getcontext
 
 
 def get_arithmetic_coding_code(string, all_symbols):
+    print(len(string))
     all_symbols = dict([(i, Decimal(str(all_symbols[i]))) for i in all_symbols.keys()])
-    # задаем нужное количество знаков после запятой, для сохранения точности
-    getcontext().prec = len(string) // 100 * 100
+    # задаем нужное количество знаков после запятой, для сохранения точностиa
+    getcontext().prec = 2**32
     result = (Decimal("0"), Decimal("1"))
     segments_dict = dict()
     sum = Decimal("0")
