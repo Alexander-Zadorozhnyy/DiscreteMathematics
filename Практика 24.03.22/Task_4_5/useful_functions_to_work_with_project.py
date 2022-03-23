@@ -31,7 +31,7 @@ def get_dict_of_symbols(string, alphabet):
 # Создаем словарь из всевозможно встречающихся по n символов сочетаний
 def make_alphabet(string, n):
     alphabet = ["<EOF>"] if "<EOF>" in string else []
-    string = string.replace("<EOF>", "")
+    string = string.replace("<EOF>", "۞")
 
     for i in range(0, len(string) - 1, n):
         if string[i:i + n] not in alphabet:
@@ -40,7 +40,7 @@ def make_alphabet(string, n):
     return alphabet
 
 
-def coding(string, codes):
+def coding(string, len_symbol, codes):
     res = ''
     end = False
     # Проверяем есть ли символ <EOF> в строке, чтобы убрать его и в конце приписать его,
@@ -48,12 +48,19 @@ def coding(string, codes):
     if "<EOF>" in string:
         end = True
         string = string.replace("<EOF>", "")
-
-    # Посимвольно кодируем каждую букву
-    for symbol in string:
-        res += codes[symbol]
-
-    return res + codes["<EOF>"] if end else res
+    if len_symbol == 1 or (len_symbol == 2 and len(string) % 2 == 0):
+        # Посимвольно кодируем каждую букву
+        for i in range(0, len(string), len_symbol):
+            res += codes[string[i:i + len_symbol]]
+        return res + codes["<EOF>"] if end else res
+    elif len_symbol == 2:
+        for i in range(0, len(string) - 1, 2):
+            res += codes[string[i:i+2]]
+        for k in list(codes.keys()):
+            if k == string[-1] + "<EOF>":
+                return res + codes[k]
+    else:
+        print("Unsupported len of symbol")
 
 
 def decoding(string, codes):
