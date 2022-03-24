@@ -88,7 +88,7 @@ def test_small_text():
 
 
 def test_big_file():
-    my_string = open("test.txt").read() + "<EOF>"
+    my_string = open("Practice_24_03/Task_4_5/test.txt").read() + "<EOF>"
     alphabet = make_alphabet(my_string, 1)
     double_alphabet = make_alphabet(my_string, 2)
 
