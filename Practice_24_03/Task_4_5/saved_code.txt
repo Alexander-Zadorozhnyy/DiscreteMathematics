@@ -1,0 +1,62 @@
+def test_is_right_coding():
+    my_string = "aabcbbbbbacabbacddacdbbaccbbadadaddd abcccccbacabbacbbaddbdaccbbddadadcc  bcabbcdabacbbacbbddcbbaccbbdbdadaac<EOF>"
+    alphabet = make_alphabet(my_string, 1)
+
+    all_symbols, count = get_dict_of_symbols(my_string, alphabet)
+    all_symbols_probability = dict()
+
+    for x in all_symbols.keys():
+        all_symbols_probability[x] = all_symbols[x] / count
+
+    Shannon_codes = get_Shannon_codes(list(all_symbols_probability.keys()), list(all_symbols_probability.values()))
+    ShannonFano_codes = get_ShannonFano_codes(list(all_symbols_probability.keys()),
+                                              list(all_symbols_probability.values()))
+    Haffman_codes = get_Haffman_codes(all_symbols)
+
+    # 1) Кодирование Хаффманом
+    encoded_message = coding(my_string, 1, Haffman_codes)
+    assert encoded_message == "10101101111111111110011011111001001001100100111111001011111100011000110001001001000" \
+                              "11010110101010101111001101111100111111000100111001100101111100100110001100010101000" \
+                              "1000111011011110100110111001111110011111001001011111100101111100111001100011010010000", \
+        "Закодированная строка и закодированаая с помощью стороннего кодера строка," \
+        " используя данный метод кодироания, не совпадают"
+
+    # 2) Кодирование Шеноном
+    encoded_message = coding(my_string, 1, Shannon_codes)
+    assert encoded_message == "0100100010000000000000101000100000010100110110010100110000001010010000000101100101100" \
+                              "1011011011011110101000100100100100100000101000100000010100000001011011000110010100100" \
+                              "0000110110010110010110100100111101111101001000100000100110010000101000000010100000011" \
+                              "011010000000101001000000110001100101100100101001111110", \
+        "Закодированная строка и закодированаая с помощью стороннего кодера строка," \
+        " используя данный метод кодироания, не совпадают"
+
+    # 3) Кодирование Шеноном-Фано
+    encoded_message = coding(my_string, 1, Haffman_codes)
+    decoded_message = decoding(encoded_message, Haffman_codes)
+    assert my_string == decoded_message, "Строка и раскодированая строка, используя данный метод кодироания, не совпадают"
+
+    # 3.1) Кодирование двойных символов Хаффманом
+    # encoded_message = coding(my_string, 2, Haffman_double_codes)
+    # decoded_message = decoding(encoded_message, Haffman_double_codes)
+    # assert my_string == decoded_message, "Строка и раскодированая строка, используя данный метод кодироания, не совпадают"
+
+    # 4) Закодировать и декодировать сообщение, используя адаптивное сжатие по Хаффмену:")
+    encoded_message = adaptive_Haffman_code(my_string, alphabet)
+    decoded_message = decoding_adaptive_Haffman_code(encoded_message, alphabet)
+    assert my_string == decoded_message, "Строка и раскодированая строка, используя данный метод кодироания, не совпадают"
+
+    # 5) Закодировать и декодировать, используя адаптивное сжатие по Хаффмену (с символом ESC)")
+    encoded_message = adaptive_Haffman_code_with_esc(my_string)
+    decoded_message = decoding_adaptive_Haffman_code_with_esc(encoded_message)
+    assert my_string == decoded_message, "Строка и раскодированая строка, используя данный метод кодироания, не совпадают"
+
+    # 6) Закодировать и декодировать сообщение, используя арифметическое кодирование")
+    encoded_message = get_arithmetic_coding_code(my_string, all_symbols_probability)
+    decoded_message = decode_arithmetic_coding_code(encoded_message, all_symbols_probability)
+    assert my_string == decoded_message, "Строка и раскодированая строка, используя данный метод кодироания, не совпадают"
+
+    # 7) Закодировать и декодировать сообщение, используя любой
+    # из алгоритмов семейства LZ*: LZ77, LZ78, LZW, LZSS2, LZMA2, LZ42"
+    encoded_message = get_LZ78_code(my_string)
+    decoded_message = decode_LZ78_code(encoded_message)
+    assert my_string == decoded_message, "Строка и раскодированая строка, используя данный метод кодироания, не совпадают"
