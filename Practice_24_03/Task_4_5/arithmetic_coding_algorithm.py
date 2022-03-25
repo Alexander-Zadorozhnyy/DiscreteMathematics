@@ -3,10 +3,9 @@ from decimal import getcontext
 
 
 def get_arithmetic_coding_code(string, all_symbols):
-    print(len(string))
     all_symbols = dict([(i, Decimal(str(all_symbols[i]))) for i in all_symbols.keys()])
     # задаем нужное количество знаков после запятой, для сохранения точностиa
-    getcontext().prec = 2**32
+    getcontext().prec = 2 ** 32
     result = (Decimal("0"), Decimal("1"))
     segments_dict = dict()
     sum = Decimal("0")
@@ -16,11 +15,9 @@ def get_arithmetic_coding_code(string, all_symbols):
         sum += list(all_symbols.values())[i]
 
     # Переходим в нужную часть выбранного в данный момент отрезка, относительно его концов.
-    for i in string.replace("<EOF>", ""):
+    for i in string:
         result = (result[0] + (result[1] - result[0]) * segments_dict[i][0],
                   result[1] - (result[1] - result[0]) * (1 - segments_dict[i][1]))
-    result = (result[0] + (result[1] - result[0]) * segments_dict["<EOF>"][0],
-              result[1] - (result[1] - result[0]) * (1 - segments_dict["<EOF>"][1])) if "<EOF>" in string else result
     # Возвращаем координату начальной вершины, так как в качестве ответа можно
     # взять любую точку из полученного полинтервала
     return result[0]
@@ -46,7 +43,7 @@ def decode_arithmetic_coding_code(answer, all_symbols):
         segments_dict[list(all_symbols.keys())[i]] = (sum, sum + list(all_symbols.values())[i])
         sum += list(all_symbols.values())[i]
     # Перемещаемя по отрезкам, пока не найдем достаточно точный отрезок, в котором находится ответ
-    while "<EOF>" not in result:
+    while "۞" not in result:
         for i in list(all_symbols.keys()):
             # Вычисляем нужный отрезок относительно локального отрезка, аналогично (0, 1)
             coords = (start[0] + (start[1] - start[0]) * segments_dict[i][0],

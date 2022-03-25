@@ -21,8 +21,11 @@ def get_message_redundancy(list_of_probabalities, list_of_codes):
 def get_dict_of_symbols(string, alphabet):
     all_symbols, count = dict.fromkeys(alphabet, 0), 0
     for x in alphabet:
-        all_symbols[x] = string.count(x)
-        count += string.count(x)
+        c = 0
+        for i in range(0, len(string), len(x)):
+            c = c + 1 if string[i: i + len(x)] == x else c
+        all_symbols[x] = c
+        count += c
     # Сортируем словарь по возрастанию кол-ва появлений в строке
     all_symbols = {key: value for key, value in sorted(all_symbols.items(), key=lambda x: -x[1])}
     return all_symbols, count
@@ -30,10 +33,9 @@ def get_dict_of_symbols(string, alphabet):
 
 # Создаем словарь из всевозможно встречающихся по n символов сочетаний
 def make_alphabet(string, n):
-    alphabet = ["<EOF>"] if "<EOF>" in string else []
-    string = string.replace("<EOF>", "")
+    alphabet = []
 
-    for i in range(0, len(string) - 1, n):
+    for i in range(0, len(string), n):
         if string[i:i + n] not in alphabet:
             alphabet.append(string[i:i + n])
 
@@ -43,16 +45,11 @@ def make_alphabet(string, n):
 def coding(string, len_symbol, codes):
     res = ''
     end = False
-    # Проверяем есть ли символ <EOF> в строке, чтобы убрать его и в конце приписать его,
-    # так как алгоритм работает посимвольно
-    if "<EOF>" in string:
-        end = True
-        string = string.replace("<EOF>", "")
     if len_symbol in [1, 2]:
         # Посимвольно кодируем каждую букву
         for i in range(0, len(string), len_symbol):
             res += codes[string[i:i + len_symbol]]
-        return res + codes["<EOF>"] if end else res
+        return res
     else:
         print("Unsupported len of symbol")
 
@@ -68,3 +65,16 @@ def decoding(string, codes):
                 i += len(codes[code])
 
     return res
+
+
+def is_string_right(string):
+    try:
+        assert "<EOF>" in string and "۞" not in string
+    except ValueError:
+        print("Your string not correspond the rules.")
+    else:
+        return string.replace("<EOF>", "۞")
+
+
+def bring_string_to_right_form(string):
+    return string.replace("۞", "<EOF>")

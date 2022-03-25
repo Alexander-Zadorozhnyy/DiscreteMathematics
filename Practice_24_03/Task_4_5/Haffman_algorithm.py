@@ -10,7 +10,7 @@ def get_Haffman_codes(list_symbols):
             result[i] = "0" + result[i] if i in list(new_dict.keys())[-1] else \
                 ("1" + result[i] if i in list(new_dict.keys())[-2] else result[i])
         # Создаем новый ключ содержащий предыдущие два со значением равным их сумме
-        new_dict["".join(list(new_dict.keys())[-2:])] = sum(list(new_dict.values())[-2:])
+        new_dict[":".join(list(new_dict.keys())[-2:])] = sum(list(new_dict.values())[-2:])
         # Удаляем те элементы, которые только что объеденили
         new_dict.pop(list(new_dict.keys())[-2])
         new_dict.pop(list(new_dict.keys())[-2])
@@ -22,11 +22,6 @@ def adaptive_Haffman_code(string, alphabet):
     result = ""
     all_symbols = dict([(i, 1) for i in alphabet])  # Словарь - ключ -> символ : значение -> количество появлений
     end = False
-    # Проверяем есть ли символ <EOF> в строке, чтобы убрать его и в конце приписать его,
-    # так как алгоритм работает посимвольно
-    if "<EOF>" in string:
-        end = True
-        string = string.replace("<EOF>", "")
 
     codes = get_Haffman_codes(all_symbols)  # С помощью обычного Хаффмана создаем
     # словарь кодов по частое появления символов в настоящий момент
@@ -36,19 +31,14 @@ def adaptive_Haffman_code(string, alphabet):
         result += codes[string[i]]
         all_symbols[string[i]] += 1
         codes = get_Haffman_codes(all_symbols)  # обновляем коды символов
-    return result + codes["<EOF>"] if end else result
+    return result
 
 
 def adaptive_Haffman_code_with_esc(string):
     result = ""
     all_symbols = dict(
-        [(i, 1) for i in ["ESC", "<EOF>"]])  # Словарь - ключ -> символ : значение -> количество появлений
+        [(i, 1) for i in ["__NULL_ESC_SYMBOL__", "۞"]])  # Словарь - ключ -> символ : значение -> количество появлений
     end = False
-    # Проверяем есть ли символ <EOF> в строке, чтобы убрать его и в конце приписать его,
-    # так как алгоритм работает посимвольно
-    if "<EOF>" in string:
-        end = True
-        string = string.replace("<EOF>", "")
 
     codes = get_Haffman_codes(all_symbols)  # С помощью обычного Хаффмана создаем
     # словарь кодов по частое появления символов в настоящий момент
@@ -62,11 +52,11 @@ def adaptive_Haffman_code_with_esc(string):
         # что дальше идет код ASCII символа) +  код ASCII символа
         # Плюс добавляем в словарь символов со значением 1
         else:
-            result += codes["ESC"] + f"{ord(string[i]):08b}"
+            result += codes["__NULL_ESC_SYMBOL__"] + f"{ord(string[i]):08b}"
             all_symbols[string[i]] = 1
         codes = get_Haffman_codes(all_symbols)  # обновляем коды символов
 
-    return result + codes["<EOF>"] if end else result
+    return result
 
 
 def decoding_adaptive_Haffman_code(string, alphabet):
@@ -91,7 +81,7 @@ def decoding_adaptive_Haffman_code(string, alphabet):
 def decoding_adaptive_Haffman_code_with_esc(string):
     i = 0
     result = ""
-    all_symbols = dict([(i, 1) for i in ["ESC", "<EOF>"]])
+    all_symbols = dict([(i, 1) for i in ["__NULL_ESC_SYMBOL__", "۞"]])
 
     codes = get_Haffman_codes(all_symbols)  # С помощью обычного Хаффмана создаем
     # словарь кодов по частое появления символов в настоящий момент
@@ -102,7 +92,7 @@ def decoding_adaptive_Haffman_code_with_esc(string):
             if string[i:].find(codes[code]) == 0:
                 i += len(codes[code])
                 # Если нет ESC значит символ уже в нашем алфавите => просто добавляем 1 к значению
-                if code != "ESC":
+                if code != "__NULL_ESC_SYMBOL__":
                     all_symbols[code] += 1
                     result += code
                 # Иначе нужно считать ASCII код и добавить его символ в алфавит
