@@ -1,0 +1,32 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python application
+
+on:
+  workflow_dispatch:
+  push: 
+    branches: [ main ]
+    paths: [ Practice_Kruskal_Prim_Deikstra/** ]
+  pull_request:
+    branches: [ main ]
+    paths: [ Practice_Kruskal_Prim_Deikstra/** ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.9"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+    - name: Test with pytest
+      run: |
+        pytest Practice_Kruskal_Prim_Deikstra/test.py

@@ -1,6 +1,5 @@
 import math
 import numpy as np
-import start as start
 
 
 class Graph:
@@ -56,7 +55,7 @@ def kruskal(graph):
             gr1 = isoleted[vertex[0]]
             isoleted[vertex[0]] += isoleted[vertex[1]]  # объединем списки двух групп вершин
             isoleted[vertex[1]] += gr1
-    print(spanning_graph)
+    return spanning_graph
 
 
 def prim(graph):
@@ -78,7 +77,7 @@ def prim(graph):
         spanning_graph.append(vertex)  # добавляем ребро в остов
         connected.add(vertex[0])  # добавляем вершины в множество U
         connected.add(vertex[1])
-    print(spanning_graph)
+    return spanning_graph
 
 
 def deikstra(graph, start_vertex, end_vertex):
@@ -112,8 +111,6 @@ def deikstra(graph, start_vertex, end_vertex):
         if vertex >= 0:  # выбрана очередная вершина
             viewed.add(vertex)  # добавляем новую вершину в рассмотрение
 
-    print(f"Длина минимального пути от вершины {start_vertex} до вершины {end_vertex} ---> {last_stroke[end_vertex]}")
-
     # формирование оптимального маршрута:
     start = start_vertex
     end = end_vertex
@@ -121,20 +118,8 @@ def deikstra(graph, start_vertex, end_vertex):
     while end != start:
         end = best_way[P[-1]]
         P.append(end)
-    print(f"Лучший маршрут от вершины {start_vertex} до вершины {end_vertex} ---> {P[::-1]}")
+    return (P[::-1], last_stroke[end_vertex])
 
 
-
-
-
-g = Graph(5)
-g.add_edge(0, 1, 8)
-g.add_edge(0, 2, 5)
-g.add_edge(1, 2, 9)
-g.add_edge(1, 3, 11)
-g.add_edge(2, 3, 15)
-g.add_edge(2, 4, 10)
-g.add_edge(3, 4, 7)
-prim(g)
-kruskal(g)
-deikstra(g, 0, 4)
+# print(f"Лучший маршрут от вершины {0} до вершины {4} ---> {deikstra(g, 0, 4)[0]}")
+# print(f"Длина минимального пути от вершины {0} до вершины {0} ---> {deikstra(g, 0, 4)[1]}")
