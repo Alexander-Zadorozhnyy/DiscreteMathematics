@@ -7,10 +7,10 @@ on:
   workflow_dispatch:
   push: 
     branches: [ main ]
-    paths: [ Practice_24_03/Task_4_5/** ]
+    paths: [ Practice_F.Falkerson_E.Karp_Dinitsa_M/** ]
   pull_request:
     branches: [ main ]
-    paths: [ Practice_24_03/Task_4_5/** ]
+    paths: [ Practice_F.Falkerson_E.Karp_Dinitsa_M/** ]
 
 jobs:
   build:
@@ -29,4 +29,4 @@ jobs:
         pip install pytest
     - name: Test with pytest
       run: |
-        pytest Practice_24_03/Task_4_5/task_5.py
+        pytest Practice_F.Falkerson_E.Karp_Dinitsa_M/tests.py
