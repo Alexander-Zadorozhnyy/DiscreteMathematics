@@ -33,11 +33,11 @@ def dfs(graph, vertex, min_cap, p, d):
         if d[v] == d[vertex] + 1:  # это условие эквивалентно поиску во вспомогательной слоистой сети
             p, delta = dfs(graph, v, min(min_cap, edge.capacity - edge.flow) if edge != None else 0, p, d)
         if delta != 0:
-            edge.flow += delta  # // насыщаем рёбра по пути dfs
+            edge.flow += delta  # насыщаем рёбра по пути dfs
             return_edge.flow -= delta
             return p, delta
     p[vertex] += 1
-    return p, 0
+    return p, 0  # O(n * m)
 
 
 def dinitsa(graph):

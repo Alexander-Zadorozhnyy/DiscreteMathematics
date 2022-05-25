@@ -1,16 +1,15 @@
 import math
 
 
-def dfs(graph, start, visited=None):
-    if visited is None:
-        visited = set()
+def dfs(graph, start, visited):
     visited.add(start)
 
-    for next in graph.network[start].difference(visited):
-        if next.capacity == 0 or next.end in visited:
-            continue
-        graph.previous[next.end] = next.start
-        dfs(graph, next.end, visited)
+    for next in graph.network[start]:
+        if next not in visited:
+            if next.capacity == 0 or next.end in visited:
+                continue
+            graph.previous[next.end] = next.start
+            dfs(graph, next.end, visited)
 
     return visited
 
@@ -29,7 +28,7 @@ def ford_falkerson(graph):
     graph.get_sink()
     max_network_flow = 0
 
-    while graph.sink.name in dfs(graph, graph.source.name):
+    while graph.sink.name in dfs(graph, graph.source.name, set()):
         path = graph.get_path()
         max_flow = get_max_flow(graph, path)
         max_network_flow += max_flow

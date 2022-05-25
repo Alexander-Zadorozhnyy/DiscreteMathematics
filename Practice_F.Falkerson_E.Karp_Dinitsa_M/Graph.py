@@ -20,20 +20,20 @@ class Edge:
 class Graph:
     def __init__(self, vertex):
         self.V = vertex
-        self.vertexes = set()
+        self.vertices = set()
         self.network = dict()
         self.previous = dict()
         self.source = None
         self.sink = None
 
     def get_source(self):
-        for vertex in self.vertexes:
+        for vertex in self.vertices:
             if vertex.source:
                 self.source = vertex
         return None
 
     def get_sink(self):
-        for vertex in self.vertexes:
+        for vertex in self.vertices:
             if vertex.sink:
                 self.sink = vertex
         return None
@@ -64,7 +64,7 @@ class Graph:
             print(f"Caught exception ---> {ex}")
 
         newVertex = Vertex(name, source, sink)
-        self.vertexes.add(newVertex)
+        self.vertices.add(newVertex)
         self.network[newVertex.name] = set()
 
     def add_edge(self, u, v, w):
